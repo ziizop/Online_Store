@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<h3 class="text-center" > Личный кабинет {{ request.user}} </h3>
+<hr>
+<div class="order-list">
+		<h4 class="text-center"> Ваши заказы</h4>
+		<table class="table" >
+		{% for item in order %}
+				<tr class="text-center" style="background: lightblue;">
+					<td>Номер заказа</td>
+					<td>Дата заказа</td>
+					<td>Статус заказа</td>
+					<td>Стоимость заказа</td>
+					<td>Способ доставки</td>
+					
+					<td></td>
+				</tr>
+			
+				<tr class="text-center">
+					<td>{{ item.id }}</td>
+					<td>{{ item.order_date}}</td>
+					<td>{{ item.status }}</td>
+					<td>{{ item.total }}</td>
+					
+					<td><button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal-{{ item.id }}"> Детали заказа</button></td>
+			
+
+		{% endfor %}
+		</table >
+{% for item in order %}
+<div class="modal fade" id="myModal-{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Заказ № {{ item.id }}</h4>
+      </div>
+      <div class="modal-body">
+      	<h3 class="text-center">Товар</h3>
+        	<table class="table">
+        	{% for order_item in item.items.all %}
+        		<tr class="text-center">
+        			<td>Название товара</td>
+        			<td>кол-во</td>
+        			<td>цена</td>
+        		</tr>
+      			{% for ord_item in order_item.items.all %}	
+        		<tr class="text-center">
+        			<td>{{ ord_item.product.title }}</td>
+        			<td>{{ ord_item.qty }} шт.</td>
+        			<td>{{ ord_item.item_total }} руб.</td>
+        		</tr>
+        		{% endfor %}
+        		<tr>
+        			<td></td>
+        			<td><strong>ИТОГО:</strong></td>
+        			<td><strong> {{ order_item.catr_total }} руб.</strong></td>
+        		</tr>
+        	{% endfor %}
+        	</table>
+        	<h3 class="text-left">Заказчик</h3>
+      		<p>Имя: {{ item.first_name }} </p>
+      		<p>Фамилия: {{ item.surname }}</p>
+      		<p>Телефон: {{ item.phone }}</p>
+      		<h3 class="text-left">Тип доставки</h3>
+      		<div>
+      			<p> {{item.buying_type}} </p>
+      			<p>	{{item.address}} </p>
+      		</div>
+      		<h3 class="text-left">Коментарии к заказу</h3>
+      		<p> {{ item.comments }} </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+	{% endfor %}
+{% endblock content %}

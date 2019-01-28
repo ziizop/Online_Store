@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<form action="{% url 'make_order' %}" method="POST">
+				{% csrf_token %}
+
+	<div class='col-sm-4' style="text-align: left;">		
+		{{ form.first_name|as_crispy_field }}
+
+		{{ form.user_email|as_crispy_field }}
+	</div>
+
+	<div class='col-sm-4' style="text-align: left;">
+		{{ form.surname|as_crispy_field }}
+
+		{{ form.phone|as_crispy_field }}
+	</div>
+
+	<div class='col-sm-10' style="text-align: left;">
+		{{ form.date|as_crispy_field }}
+		{{ form.buying_type|as_crispy_field }}
+		{{ form.address|as_crispy_field }}
+		{{ form.comments|as_crispy_field }}
+	</div>
+
+	<div class='col-sm-10' style="text-align: left;">
+
+		<input type='submit' class='btn btn-info' value='Оформить заказ'>
+
+	</div>
+</form>
+	
+<script src="{% static 'js/jquery.js' %}"></script>
+<script>
+$(document).ready(function(){
+	$('#div_id_address').css('display', 'none')
+	$('#id_buying_type').on('click', function(){
+			buying_type = $(this).val()
+			if (buying_type == 'delivery'){
+				$('#div_id_address').css('display', 'block')
+			}
+			else{
+				$('#div_id_address').css('display','none')
+			}
+
+	})
+	$('#id_first_name').css('width', '300px')
+	$('#id_surname').css('width', '300px')
+	$('#id_user_email').css('width', '300px')
+	$('#id_phone').css('width', '300px')
+	$('#id_buying_type').css('width', '300px')
+	$('#id_date_day').css('width', '60px').css('display', 'inline')
+	$('#id_date_month').css('width', '100px').css('display', 'inline')
+	$('#id_date_year').css('width', '100px').css('display', 'inline')﻿
+})
+
+</script>
+{% endblock content %}
